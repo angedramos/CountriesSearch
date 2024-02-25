@@ -1,0 +1,60 @@
+<div
+  *ngIf="countries.length === 0; else table"
+  class="alert alert-warning text-center"
+>
+  No hay paises que mostrar
+</div>
+
+<ng-template #table>
+  <table class="table table-hover"  >
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Icon</th>
+        <th>Flag</th>
+        <th>Name</th>
+        <th>Capital</th>
+        <th>Population</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let country of countries| paginate:{itemsPerPage: tableSize,
+      currentPage: page,  totalItems: count}; index as i ">
+        <td>{{ i + 1 }}</td>
+        <td>{{ country.flag }}</td>
+        <td>
+          <img [src]="country.flags.svg" [alt]="country.name.common" />
+        </td>
+        <td>
+          {{ country.name.common }}
+        </td>
+        <td>
+          {{ country.capital }}
+        </td>
+        <td>
+          {{ country.population | number }}
+        </td>
+        <td>
+          <a [routerLink]="['/countries/by', country.cca3]">Info</a>
+        </td>
+      </tr>
+    </tbody> 
+  </table>  
+  <div class="paginationControls row">
+    <pagination-controls
+    previousLabel="prev"
+    nextLabel="Next"
+    (pageChange)="onTableDataChange($event)"
+    class="col-6"
+    ></pagination-controls>
+    <div class="col-4 d-flex">
+      <p >Items per Page</p>
+      <select class="col-2 selectPage" (change)="onTableSizeChange($event)">
+        <option *ngFor="let size of tableSizes">{{size}}</option>
+      </select>
+    </div>
+
+  </div>
+</ng-template>
+
+
